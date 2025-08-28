@@ -1,20 +1,25 @@
-import type { FC } from 'react';
+import React, { type FC, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import HomePage from './components/pages/HomePage';
-import TasksPage from './components/pages/TasksPage';
-import ListPage from './components/pages/ListPage';
+import Loading from './components/atoms/Loading';
+import { ROUTES } from './constants/routes';
+
+const HomePage = React.lazy(() => import('./components/pages/HomePage'));
+const TasksPage = React.lazy(() => import('./components/pages/TasksPage'));
+const ListPage = React.lazy(() => import('./components/pages/ListPage'));
 
 const App: FC = () => (
 	<Provider store={store}>
 		<div className="App">
-			<Routes>
-				<Route path="/" element={<HomePage />} />
-				<Route path="/tasks" element={<TasksPage />} />
-				<Route path="/list" element={<ListPage />} />
-				<Route path="*" element={<Navigate to="/" replace />} />
-			</Routes>
+			<Suspense fallback={<Loading size="large" text="Loading page..." />}>
+				<Routes>
+					<Route path={ROUTES.home} element={<HomePage />} />
+					<Route path={ROUTES.tasks} element={<TasksPage />} />
+					<Route path={ROUTES.list} element={<ListPage />} />
+					<Route path="*" element={<Navigate to={ROUTES.home} replace />} />
+				</Routes>
+			</Suspense>
 		</div>
 	</Provider>
 );
