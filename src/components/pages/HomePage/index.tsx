@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import MainTemplate from '../../templates/MainTemplate';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
+import { ROUTES } from '../../../constants/routes';
 
 const HomePage: FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const HomePage: FC = () => {
         <Button
           variant="primary"
           size="large"
-          onClick={() => navigate('/tasks')}
+          onClick={() => navigate(ROUTES.tasks)}
           className="w-full flex flex-col items-center justify-center p-6 space-y-2"
         >
           <Text variant="h3" className="text-center">
@@ -36,7 +37,7 @@ const HomePage: FC = () => {
         <Button
           variant="secondary"
           size="large"
-          onClick={() => navigate('/list')}
+          onClick={() => navigate(ROUTES.list)}
           className="w-full flex flex-col items-center justify-center p-6 space-y-2"
         >
           <Text variant="h3" className="text-center">
