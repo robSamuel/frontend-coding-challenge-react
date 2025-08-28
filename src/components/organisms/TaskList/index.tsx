@@ -1,72 +1,65 @@
 import { useState } from 'react';
 import type { FC } from 'react';
-import {useAppDispatch } from '../../../hooks/useAppDispatch';
-import { useAppSelector } from '../../../hooks/useAppSelector'
-import { addTask, removeTask } from '../../../store/tasksSlice';
+import { useTasks } from '../../../hooks/useTasks';
 import TaskItem from '../../molecules/TaskItem';
 import Button from '../../atoms/Button';
-import Modal from '../../atoms/Modal';
 import TaskForm from '../../molecules/TaskForm';
 import Text from '../../atoms/Text';
+import type { Task } from '../../../types/task';
 
 const TaskList: FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { tasks } = useAppSelector(state => state.tasks);
-  const dispatch = useAppDispatch();
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { tasks, clearTasksStorage } = useTasks();
 
-  const handleAddTask = (description: string) => {
-    dispatch(addTask({ description }));
-    setIsModalOpen(false);
-  };
+	const handleClearStorage = () => {
+		clearTasksStorage();
 
-  const handleDeleteTask = (id: string) => {
-    dispatch(removeTask(id));
-  };
+		window.location.reload();
+	};
 
-  const toggleOpenModal = () => setIsModalOpen(prevIsModalOpen => !prevIsModalOpen)
+	const toggleOpenModal = () =>
+		setIsModalOpen((prevIsModalOpen) => !prevIsModalOpen);
 
-  return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <Text variant="h2">My tasks</Text>
-        <Button
-          variant="primary"
-          onClick={toggleOpenModal}
-        >
-          Add New Task
-        </Button>
-      </div>
+	const renderTasks = () => {
+		if (tasks.length === 0) {
+			return (
+				<div className="text-center py-8">
+					<Text variant="body" className="text-gray-500">
+						No tasks created yet. Create your first task!
+					</Text>
+				</div>
+			);
+		}
 
-      <div className="space-y-4">
-        {tasks.length === 0 ? (
-          <div className="text-center py-8">
-            <Text variant="body" className="text-gray-500">
-              No tasks created yet. Create your first task!
-            </Text>
-          </div>
-        ) : (
-          tasks.map(task => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onDelete={handleDeleteTask}
-            />
-          ))
-        )}
-      </div>
+		return tasks.map((task: Task) => <TaskItem key={task.id} task={task} />);
+	};
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={toggleOpenModal}
-        title="Create New Task"
-      >
-        <TaskForm
-          onSubmit={handleAddTask}
-          onCancel={toggleOpenModal}
-        />
-      </Modal>
-    </div>
-  );
+	return (
+		<div className="w-full max-w-2xl mx-auto">
+			<div className="flex items-center justify-between mb-6">
+				<Text variant="h2">My tasks</Text>
+				<div className="flex space-x-2">
+					<Button variant="primary" onClick={toggleOpenModal}>
+						Add New Task
+					</Button>
+					{tasks.length > 0 && (
+						<Button variant="danger" size="small" onClick={handleClearStorage}>
+							Clear
+						</Button>
+					)}
+				</div>
+			</div>
+
+			<div className="space-y-4">{renderTasks()}</div>
+
+			{isModalOpen && (
+				<TaskForm
+					isModalOpen={isModalOpen}
+					toggleOpenModal={toggleOpenModal}
+				/>
+			)}
+		</div>
+	);
 };
 
 export default TaskList;

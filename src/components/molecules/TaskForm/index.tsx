@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import type { FC, FormEvent } from 'react';
-import Input from '../../atoms/Input';
 import Button from '../../atoms/Button';
+import Input from '../../atoms/Input';
+import Modal from '../../atoms/Modal';
+import { useTasks } from '../../../hooks/useTasks';
 
 interface TaskFormProps {
-  onSubmit: (description: string) => void;
-  onCancel: () => void;
+  isModalOpen: boolean;
+  toggleOpenModal: () => void;
 }
 
-const TaskForm: FC<TaskFormProps> = ({ onSubmit, onCancel }) => {
+const TaskForm: FC<TaskFormProps> = ({ isModalOpen, toggleOpenModal }) => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
+  const { createTask } = useTasks();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -21,11 +24,17 @@ const TaskForm: FC<TaskFormProps> = ({ onSubmit, onCancel }) => {
     }
 
     setError('');
-    onSubmit(description.trim());
+    createTask({description: description.trim()});
+    toggleOpenModal();
     setDescription('');
   };
 
   return (
+    <Modal
+				isOpen={isModalOpen}
+				onClose={toggleOpenModal}
+				title="Create New Task"
+			>
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
         value={description}
@@ -47,13 +56,14 @@ const TaskForm: FC<TaskFormProps> = ({ onSubmit, onCancel }) => {
         <Button
           type="button"
           variant="secondary"
-          onClick={onCancel}
+          onClick={toggleOpenModal}
           className="flex-1"
         >
           Cancel
         </Button>
       </div>
     </form>
+    </Modal>
   );
 };
 
