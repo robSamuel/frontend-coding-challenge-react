@@ -1,14 +1,14 @@
 import axios from 'axios';
 
-// Configuración base de axios
 const api = axios.create({
-  timeout: 10000, // 10 segundos
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para manejar errores globalmente
+// NOTE: Interceptor to handle errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {

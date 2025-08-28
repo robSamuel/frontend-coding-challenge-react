@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { listService } from '../services/listService';
+import { getElements } from '../services/listService';
 import type { RemoteItem } from '../types/remote';
 
 export const useList = () => {
@@ -12,8 +12,8 @@ export const useList = () => {
     setError(null);
 
     try {
-      const data = await listService.getElements();
-      setItems(data);
+      const data = await getElements();
+      setItems(data || []);
     } catch (err) {
       setItems([]);
       setError(err instanceof Error ? err.message : 'Unknown error');
