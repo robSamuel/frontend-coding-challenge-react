@@ -4,6 +4,8 @@ import { useTasks } from '../../../hooks/useTasks';
 import Button from '../../atoms/Button';
 import Text from '../../atoms/Text';
 import { formatDate } from '../../../utils/date';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 interface TaskItemProps {
 	task: Task;
@@ -28,6 +30,7 @@ const TaskItem: FC<TaskItemProps> = ({ task }) => {
 			className="ml-4"
 		>
 			Delete
+			<FontAwesomeIcon className="ml-1" icon={faTrash} />
 		</Button>
 	</div>
 )};

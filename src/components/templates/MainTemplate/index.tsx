@@ -2,6 +2,8 @@ import type { FC, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 interface MainTemplateProps {
 	children: ReactNode;
@@ -23,7 +25,8 @@ const MainTemplate: FC<MainTemplateProps> = ({
 					{showBackButton && (
 						<div className="flex justify-start mb-4">
 							<Button variant="secondary" size="small" onClick={() => navigate(-1)}>
-								← Back
+								<FontAwesomeIcon className="mr-1" icon={faArrowLeft} />
+								Back
 							</Button>
 						</div>
 					)}

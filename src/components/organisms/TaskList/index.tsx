@@ -6,6 +6,8 @@ import Button from '../../atoms/Button';
 import TaskForm from '../../molecules/TaskForm';
 import Text from '../../atoms/Text';
 import type { Task } from '../../../types/task';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEraser, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const TaskList: FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,11 +42,13 @@ const TaskList: FC = () => {
 				<Text variant="h2">My tasks</Text>
 				<div className="flex space-x-2">
 					<Button variant="primary" onClick={toggleOpenModal}>
-						Add New Task
+						Add
+            <FontAwesomeIcon className="ml-1" icon={faPlus} />
 					</Button>
 					{tasks.length > 0 && (
-						<Button variant="danger" size="small" onClick={handleClearStorage}>
+						<Button variant="danger" onClick={handleClearStorage}>
 							Clear
+              <FontAwesomeIcon className="ml-1" icon={faEraser} />
 						</Button>
 					)}
 				</div>

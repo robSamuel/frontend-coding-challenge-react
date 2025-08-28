@@ -1,3 +1,5 @@
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { FC, ReactNode} from 'react';
 
 interface ModalProps {
@@ -20,11 +22,20 @@ const Modal: FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
-      <div 
+      {/** biome-ignore lint/a11y/useSemanticElements: <explanation> */}
+      <div
         className="fixed inset-0 bg-black/50 transition-opacity"
+        role="button"
+        tabIndex={0}
+        aria-label="Close modal"
         onClick={onClose}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onClose();
+          }
+        }}
       />
-      
+
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
         <div className={`relative bg-white rounded-lg shadow-xl max-w-md w-full ${className}`}>
@@ -36,10 +47,7 @@ const Modal: FC<ModalProps> = ({
                 onClick={onClose}
                 className="text-gray-400 hover:text-gray-600 focus:outline-none focus:text-gray-600"
               >
-                <span className="sr-only">Close</span>
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <FontAwesomeIcon icon={faXmark} />
               </button>
             </div>
           )}
